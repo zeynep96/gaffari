@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eisenhower Matrisi - Bilardo Masası (6 Cepli)</title>
+    <style>
+        /* Bilardo Masası Teması Başlangıcı */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: black; /* Koyu dış arkaplan */
+            color: #E5E7EB; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            padding-bottom: 15px;
+            background: #104728;
+            border-radius: 12px;
+            box-shadow: 0 0 40px #9e7053, 0 0 0 10px #3c1d08; /* Daha derin gölge ve koyu dış çerçeve */
+            box-sizing: border-box;
+            color: #E0E0E0;
+
+            /* Delik efektleri için konumlandırma */
+            position: relative;
+            overflow: hidden; 
+        }
+
+        /* Köşe Delikleri (Cepler) */
+        .pocket {
+            position: absolute;
+            background: rgba(78, 61, 51, 0.85); /* Koyu cep içi */
+            border-radius: 50%; 
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(27, 26, 26, 0.7); 
+            width: 45px; /* Cep boyutu */
+            height: 45px;
+            z-index: 10; 
+            border: 2px solid #555; 
+        }
+        /* Köşeler */
+        .pocket.top-left { top: -22px; left: -22px; }
+        .pocket.top-right { top: -22px; right: -22px; }
+        .pocket.bottom-left { bottom: -22px; left: -22px; }
+        .pocket.bottom-right { bottom: -22px; right: -22px; }
+        
+        /* ORTA CEPLERİN KONUMLANDIRILMASI (Sol ve Sağ Ortası) */
+        .pocket.middle-left { 
+            top: 50%; 
+            left: -30px; 
+            transform: translateY(-50%); 
+        }
+        .pocket.middle-right { 
+            top: 50%; 
+            right: -30px; 
+            transform: translateY(-50%); 
+        }
+
+
+        /* Mobil Uyumlu Düzenleme (Minimal değişiklikler korundu) */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+                margin: 20px auto;
+                padding: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                margin: 10px auto;
+                padding: 10px;
+            }
+            .pocket { 
+                display: none; /* Mobil görünümde cepleri gizle */
+            }
+        }
+        /* --- Mobil Uyumluluk Sonu --- */
+
+
+        /* Üst Kısım Stilleri */
+        .header {
+            padding: 0 0 10px 0;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 800;
+            color: #FFD700; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            border-bottom: 3px solid #fff4b7; 
+            
+        }
+
+        .header h2 {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            color: #D3D3D3; 
+            font-weight: 300;
+        }
+
+        .question-box {
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #E0E0E0; 
+            padding: 10px;
+            border-left: 5px solid #FFD700; 
+            background: #3A3A3A; 
+        }
+
+        .notes-box {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            resize: vertical;
+            border: 1px solid #666;
+            border-radius: 6px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 1em;
+            background: #4A4A4A; 
+            color: #E0E0E0;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #FFD700; 
+            outline: none;
+        }
+
+        /* Buton Stilleri */
+        button {
+            padding: 10px 18px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 4px;
+            background: #5F9EA0; 
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+            margin-right: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        button:hover {
+            background: #008B8B; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+        }
+
+        /* Matris Grid Alanı - Masanın Yeşil Kısmı */
+        .grid-area {
+            background: #2E8B57; /* Bilardo Masası Yeşili */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8); /* Yeşile derinlik katmak için iç gölge */
+            margin-top: 10px;
+        }
+
+        /* Matris Grid Stilleri */
+        .grid {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr;
+            grid-template-rows: 60px 1fr 1fr;
+            gap: 5px; 
+            background: #2E8B57; /* Kutu araları da yeşil olsun */
+        }
+
+        .axis {
+            background: #1C6B45; /* Yeşil kadife rengi eksenler */
+            color: #FFD700; /* Altın rengi metin */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1em;
+            border-radius: 4px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5); 
+        }
+
+        .left-axis {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .box {
+            padding: 15px;
+            padding-top: 10px;
+            border-radius: 4px;
+            border: 2px solid #1C6B45; /* Koyu yeşil border */
+        }
+
+        .box-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        /* KUTU RENKLERİ (BİLARDO TOPU RENKLERİ) */
+        .bg-yap { background: #B22222; }
+        .bg-planla { background: #000080; }
+        .bg-devret { background: #FF8C00; }
+        .bg-ele { background: #800080; }
+
+        .bg-yap textarea, .bg-planla textarea, .bg-devret textarea, .bg-ele textarea {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+        }
+        
+        /* Mobil Grid Düzenlemesi */
+        @media (max-width: 600px) {
+            .grid {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .axis {
+                height: 40px;
+                order: -1;
+            }
+
+            .left-axis {
+                writing-mode: horizontal-tb !important;
+                transform: none !important;
+                justify-content: flex-start;
+                padding-left: 12px;
+                background: #34495E; 
+                color: white;
+                margin-top: 10px;
+            }
+
+            .box {
+                padding: 15px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        
+        <div class="pocket top-left"></div>
+        <div class="pocket top-right"></div>
+        <div class="pocket bottom-left"></div>
+        <div class="pocket bottom-right"></div>
+        <div class="pocket middle-left"></div>
+        <div class="pocket middle-right"></div>
+
+
+        <div class="header">
+            <h1 style="text-align:center;">Gaffari’nin Bilardo Masası</h1>
+            <h2 style="text-align:center;">Günlük Düşünceler ve Öncelikler</h2>
+
+
+            <div class="question-box">
+                <p id="question">Yükleniyor...</p>
+            </div>
+
+            <div class="notes-box">
+                <textarea id="note" placeholder="Düşüncelerinizi buraya yazın..."></textarea><br>
+                <button onclick="newQuestion()">Yeni Vuruş</button>
+                <button onclick="downloadNotesCSV()">Notları İndir</button>
+            </div>
+        </div>
+
+        <div class="grid-area">
+            <div class="grid">
+
+                <div></div>
+                <div class="axis">⚡️ ACİL</div>
+                <div class="axis">⏳ ACİL DEĞİL</div>
+
+                <div class="axis left-axis">ÖNEMLİ</div>
+
+                <div class="box bg-yap">
+                    <div class="box-title">✅ YAP - Cebe At!</div>
+                    <textarea id="yap"></textarea>
+                </div>
+
+                <div class="box bg-planla">
+                    <div class="box-title">🗓️ PLANLA - Sonraki Vuruşu Ayarla</div>
+                    <textarea id="planla"></textarea>
+                </div>
+
+                <div class="axis left-axis">➖ ÖNEMLİ DEĞİL</div>
+
+                <div class="box bg-devret">
+                    <div class="box-title">Acil ama Önemli Değil - Devret?</div>
+                    <textarea id="devret"></textarea>
+                </div>
+
+                <div class="box bg-ele">
+                    <div class="box-title">Önemli Değil & Acil Değil</div>
+                    <textarea id="ele"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 5px; text-align: center;">
+            <button onclick="downloadMatrixCSV()">Matrisi İndir</button>
+            <button onclick="downloadCombinedCSV()">Tümünü İndir</button>
+        </div>
+    </div>
+
+    <script>
+        // Felsefi sorular dizisi
+        const questions = [
+            "Bugün hangi topu cebe atacaksın?",
+            "Hangi topu masadan kaldırmalısın ve neden?",
+            "Hangi vuruşun seni uzun vadede oyunda tutacağını düşünüyorsun?",
+            "Hangi vuruş açısından kaçıyorsun ve neden?"
+        ];
+
+        // Yeni soru seç
+        function newQuestion() {
+            const q = questions[Math.floor(Math.random() * questions.length)];
+            document.getElementById('question').innerText = q;
+        }
+
+
+        // Notları CSV indir
+        function downloadNotesCSV() {
+            const note = document.getElementById('note').value.trim();
+            const question = document.getElementById('question').innerText;
+            const date = new Date().toLocaleDateString();
+
+            let csvContent = `Tarih;Soru;Cevap\n${date};${question};${note}\n`;
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Notlar.csv";
+            link.click();
+        }
+
+
+
+        function downloadMatrixCSV() {
+            const yap = document.getElementById("yap").value.replace(/\n/g, "; ");
+            const planla = document.getElementById("planla").value.replace(/\n/g, "; ");
+            const devret = document.getElementById("devret").value.replace(/\n/g, "; ");
+            const ele = document.getElementById("ele").value.replace(/\n/g, "; ");
+            const date = new Date().toLocaleDateString();
+
+            // İlk satırda sadece tarih
+            let csv = `Tarih:${date};acil;acil değil\n`;
+            csv += `önemli;${yap};${planla}\n`;
+            csv += `önemli değil;${devret};${ele}\n`;
+
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Eisenhower_Matrisi.csv";
+            link.click();
+        }
+
+
+
+        // Notlar ve matrisi birleştirip tek CSV indir 
+        function downloadCombinedCSV() {
+            const note = document.getElementById('note').value.trim();
+            const question = document.getElementById('question').innerText;
+            const date = new Date().toLocaleDateString();
+
+            const yap = document.getElementById("yap").value.replace(/\n/g, " | ");
+            const planla = document.getElementById("planla").value.replace(/\n/g, " | ");
+            const devret = document.getElementById("devret").value.replace(/\n/g, " | ");
+            const ele = document.getElementById("ele").value.replace(/\n/g, " | ");
+
+            let csv = "Tarih;Soru;Cevap;Yap(Ön.Acil);Planla(Ön.AcilD);Devret(ÖnD.Acil);Sil(ÖnD.AcilD)\n";
+            csv += `${date};"${question}";"${note}";"${yap}";"${planla}";"${devret}";"${ele}"\n`;
+
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Not_ve_Matris.csv";
+            link.click();
+        }
+
+
+
+
+        // Sayfa açılır açılmaz soru göster
+        window.onload = function () {
+            newQuestion();
+        };
+
+    </script>
+
+</body>
+
+</html>
