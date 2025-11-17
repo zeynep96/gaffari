@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eisenhower Matrisi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #070758;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgb(255, 255, 255);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgb(255, 255, 255);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        /* Mobil uyumlu düzenleme */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+                /* Ekranı neredeyse tamamen doldur */
+                margin: 20px auto;
+                /* Yukarıdan ve aşağıdan biraz azaltılmış boşluk */
+                padding: 12px 15px;
+                /* Daha az padding */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                /* Mobilde tam genişlik */
+                margin: 10px auto;
+                padding: 10px 12px;
+                /* En küçük padding ile rahat kullanım */
+                border-radius: 6px;
+                /* Daha küçük köşe yuvarlama */
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+                /* Hafif gölge azaltıldı */
+            }
+        }
+
+
+        /* Üst kısım stilleri */
+        .header {
+            padding: 15px;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #070758;
+        }
+
+        .header h2 {
+            margin-bottom: 30px;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .question-box {
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.1em;
+            padding: 10px;
+            border-left: 5px solid #070758;
+
+        }
+
+        .notes-box {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 0.95em;
+            border: none;
+            border-radius: 6px;
+            background: #efefef;
+            color: black;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #333;
+            color: white;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr;
+            grid-template-rows: 60px 1fr 1fr;
+            gap: 2px;
+        }
+
+        .axis {
+            background: #efefef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        .left-axis {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .box {
+            padding: 15px;
+            background: white;
+        }
+
+        .box-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .bg-yap {
+            background: #070758;
+            color: white;
+        }
+
+        .bg-planla {
+            background: #1F3A8E;
+            color:white;
+        }
+
+        .bg-devret {
+            background: #5D83E3;
+        }
+
+        .bg-ele {
+            background: #B3C7F8;
+        }
+
+        /* Mobil uyumlu düzenleme */
+        @media (max-width: 600px) {
+            .grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                /* Tek sütun */
+                grid-template-rows: repeat(7, auto);
+                /* Satır sayısı içeriğe göre */
+                gap: 10px;
+            }
+
+            .left-axis {
+                writing-mode: horizontal-tb !important;
+                /* Dikey yazıyı yataya çevir */
+                transform: none !important;
+                justify-content: flex-start;
+                padding-left: 12px;
+            }
+
+            .axis,
+            .box,
+            .box-title {
+                justify-content: flex-start !important;
+                padding-left: 12px;
+                font-size: 14px;
+                /* Mobilde biraz küçült */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <h1 style="text-align:center; letter-spacing:1px; font-weight:700;">Gaffari’nin Dünyası</h1>
+            <h2 style="text-align:center;">Günlük düşünceler ve öncelikler</h2>
+
+
+            <div class="question-box">
+                <p id="question">Yükleniyor...</p>
+            </div>
+
+            <div class="notes-box">
+                <textarea id="note" placeholder="Düşüncelerinizi buraya yazın..."></textarea><br>
+                <button onclick="newQuestion()">Başka Soru</button>
+                <button onclick="downloadNotesCSV()">Cevabı Excel Olarak İndir</button>
+            </div>
+        </div>
+
+        <!-- Eisenhower matrisi grid -->
+        <div class="grid">
+
+            <div></div>
+            <div class="axis">ACİL</div>
+            <div class="axis">ACİL DEĞİL</div>
+
+            <div class="axis left-axis">ÖNEMLİ</div>
+
+            <div class="box bg-yap">
+                <div class="box-title">YAP - Acil ve Önemli!</div>
+                <textarea id="yap"></textarea>
+            </div>
+
+            <div class="box bg-planla">
+                <div class="box-title">PLANLA - Önemli ama acil değil</div>
+                <textarea id="planla"></textarea>
+            </div>
+
+            <div class="axis left-axis">ÖNEMLİ DEĞİL</div>
+
+            <div class="box bg-devret">
+                <div class="box-title">Acil ama Önemli Değil - Devredilebilir mi?</div>
+                <textarea id="devret"></textarea>
+            </div>
+
+            <div class="box bg-ele">
+                <div class="box-title">Ne önemli ne de acil - Gerçekten gerekli mi?</div>
+                <textarea id="ele"></textarea>
+            </div>
+        </div>
+
+        <button onclick="downloadMatrixCSV()">Matrisi CSV Olaærak İndir</button>
+        <button onclick="downloadCombinedCSV()">Notlar ve Matris Birleşik İndir</button>
+    </div>
+
+    <script>
+        // Felsefi sorular dizisi
+        const questions = [
+            "Bugün hangisi seni gerçekten ileri taşır?",
+            "Hangi sorumluluktan kaçıyorsun ve neden?",
+            "Hayatında gerçekten önemli olan nedir?",
+            "Bugün kendin için küçük bir adım atabilir misin?",
+            "Hangi kararın seni uzun vadede mutlu edeceğini düşünüyorsun?"
+        ];
+
+        // Yeni soru seç
+        function newQuestion() {
+            const q = questions[Math.floor(Math.random() * questions.length)];
+            document.getElementById('question').innerText = q;
+        }
+
+        // Not kaydetme
+        function saveNote() {
+            const text = document.getElementById('note').value.trim();
+            if (!text) {
+                alert("Not boş olamaz!");
+                return;
+            }
+            const date = new Date().toLocaleString();
+            const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+            savedNotes.push({ date, question: document.getElementById('question').innerText, answer: text });
+            localStorage.setItem('notes', JSON.stringify(savedNotes));
+            alert('Not kaydedildi!');
+            document.getElementById('note').value = '';
+        }
+
+        // Notları CSV indir
+        function downloadNotesCSV() {
+            const note = document.getElementById('note').value.trim();
+            const question = document.getElementById('question').innerText;
+            const date = new Date().toLocaleDateString();
+
+            let csvContent = `Tarih;Soru;Cevap\n${date};${question};${note}\n`;
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Notlar.csv";
+            link.click();
+        }
+
+
+
+        // Eisenhower matrisi CSV indir
+        function downloadMatrixCSV() {
+            const yap = document.getElementById("yap").value.replace(/\n/g, "; ");
+            const planla = document.getElementById("planla").value.replace(/\n/g, "; ");
+            const devret = document.getElementById("devret").value.replace(/\n/g, "; ");
+            const ele = document.getElementById("ele").value.replace(/\n/g, "; ");
+            const date = new Date().toLocaleDateString();
+
+            // İlk satırda sadece tarih
+            let csv = `Tarih:${date};acil;acil değil\n`;
+            csv += `önemli;${yap};${planla}\n`;
+            csv += `önemli değil;${devret};${ele}\n`;
+
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Eisenhower_Matrisi.csv";
+            link.click();
+        }
+
+
+
+        // Notlar ve matrisi birleştirip tek CSV indir (notlar localStorage'dan)
+        function downloadCombinedCSV() {
+            const note = document.getElementById('note').value.trim();
+            const question = document.getElementById('question').innerText;
+            const date = new Date().toLocaleDateString();
+
+            const yap = document.getElementById("yap").value.replace(/\n/g, "; ");
+            const planla = document.getElementById("planla").value.replace(/\n/g, "; ");
+            const devret = document.getElementById("devret").value.replace(/\n/g, "; ");
+            const ele = document.getElementById("ele").value.replace(/\n/g, "; ");
+
+            let csv = "Tarih;Soru;Cevap;;önemli&acil;önemli&acil değil;önemli değil&acil;önemli değil&acil değil\n";
+            csv += `${date};${question};${note};;${yap};${planla};${devret};${ele}\n`;
+
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Not_ve_Matris.csv";
+            link.click();
+        }
+
+
+
+
+        // Sayfa açılır açılmaz soru göster
+        window.onload = function () {
+            newQuestion();
+        };
+
+    </script>
+
+</body>
+
+</html>
