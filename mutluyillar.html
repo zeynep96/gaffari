@@ -14,11 +14,14 @@
         }
 
         body {
-            background-color: #3c1d08; /* Koyu kahverengi zemin */
+            background-color: #3c1d08;
+            /* Koyu kahverengi zemin */
             min-height: 100vh;
             display: flex;
-            justify-content: center; /* Yatayda ortala */
-            align-items: center; /* Dikeyde ortala */
+            justify-content: center;
+            /* Yatayda ortala */
+            align-items: center;
+            /* Dikeyde ortala */
             overflow: hidden;
         }
 
@@ -33,7 +36,7 @@
         /* -------------------------------------- */
         /* AÇILMA KURALLARI */
         /* -------------------------------------- */
-        
+
         /* 1. MASAÜSTÜ HOVER İLE AÇMA/KAPAMA */
         .card:hover .outside {
             transform: rotateY(-130deg);
@@ -43,12 +46,12 @@
         .card.opened .outside {
             transform: rotateY(-130deg);
         }
-        
+
         /* 3. AÇILDIKTAN SONRA ÇATIŞMA ÇÖZÜMÜ (ÇOK ÖNEMLİ) */
         /* Kart açıldığında, kapağın (outside) tıklama olaylarını görmezden gelmesini sağlar.
            Böylece tıklama altındaki .inside elementine ulaşır ve kapanma tetiklenir. */
         .card.opened .outside {
-            pointer-events: none; 
+            pointer-events: none;
         }
 
         /* -------------------------------------- */
@@ -62,15 +65,17 @@
             position: absolute;
             left: 50%;
         }
-        
+
         /* AÇILAN KISIM (KAPAK) */
         .outside {
             -webkit-transform-style: preserve-3d;
             transform-style: preserve-3d;
-            z-index: 1; /* Kapalıyken en üstte */
+            z-index: 1;
+            /* Kapalıyken en üstte */
             transform-origin: left;
             transition: 2s;
-            cursor: pointer; /* Açılma alanının tıklanabilir olduğunu gösterir */
+            cursor: pointer;
+            /* Açılma alanının tıklanabilir olduğunu gösterir */
         }
 
         /* İÇ KISIM (MESAJ) */
@@ -85,7 +90,8 @@
             justify-content: space-around;
             align-items: center;
             font-size: 1.1em;
-            cursor: pointer; /* Kapanma alanının tıklanabilir olduğunu gösterir */
+            cursor: pointer;
+            /* Kapanma alanının tıklanabilir olduğunu gösterir */
         }
 
         .front,
@@ -99,14 +105,15 @@
         }
 
         .front {
-            background-color: #104728; /* Bilardo yeşili */
+            background-color: #104728;
+            /* Bilardo yeşili */
         }
 
         .back {
             transform: rotateY(180deg);
             background: linear-gradient(to left, #2e170d, #f0f0f0 1%);
         }
-        
+
         /* ... PASTA KURALLARI (DEĞİŞMEDİ) ... */
 
         .cake {
@@ -284,28 +291,28 @@
 
         // 1. AÇMA TETİKLEYİCİSİ (Kapalı kartın dış kapağı)
         const outsideElement = document.querySelector('.outside');
-        
+
         // Bu, mobilde açmayı sağlar.
         outsideElement.addEventListener('touchstart', (event) => {
-             // Dokunma olayının diğer elementlere yayılmasını engeller (çift tıklama/hover etkileşimini önler)
-             event.preventDefault(); 
-             // Kartın şu anki durumuna göre açar veya kapatır
-             toggleCard();
+            // Dokunma olayının diğer elementlere yayılmasını engeller (çift tıklama/hover etkileşimini önler)
+            event.preventDefault();
+            // Kartın şu anki durumuna göre açar veya kapatır
+            toggleCard();
         });
-        
+
         // Masaüstünde tıklama olayını da yakalar, ancak mobil cihazlarda touchstart çalıştığı için çakışmaz.
         outsideElement.addEventListener('click', toggleCard);
 
 
         // 2. KAPAMA TETİKLEYİCİSİ (Açık kartın iç mesaj alanı)
         const insideElement = document.querySelector('.inside');
-        
+
         // Bu, mobilde kapamayı sağlar.
         insideElement.addEventListener('touchstart', (event) => {
             event.preventDefault();
             toggleCard();
         });
-        
+
         // Masaüstünde kapamayı sağlar.
         insideElement.addEventListener('click', toggleCard);
 
