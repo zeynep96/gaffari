@@ -339,22 +339,22 @@
         function toggleCard() {
             const card = document.querySelector('.card');
             // 'opened' sınıfını ekler veya kaldırır
-            card.classList.toggle('opened'); 
+            card.classList.toggle('opened');
         }
 
         // --- OLAY YAKALAYICILAR ---
 
         // 1. AÇMA TETİKLEYİCİSİ (Kapalı kartın dış kapağı)
         const outsideElement = document.querySelector('.outside');
-        
+
         // Bu, mobilde açmayı sağlar.
         outsideElement.addEventListener('touchstart', (event) => {
-             // Dokunma olayının kaydırma vb. yapmasını engeller
-             event.preventDefault(); 
-             // Kartın şu anki durumuna göre açar veya kapatır
-             toggleCard();
+            // Dokunma olayının kaydırma vb. yapmasını engeller
+            event.preventDefault();
+            // Kartın şu anki durumuna göre açar veya kapatır
+            toggleCard();
         });
-        
+
         // Masaüstünde tıklama olayını da yakalar, ancak mobil cihazlarda touchstart çalıştığı için çakışmaz.
         outsideElement.addEventListener('click', toggleCard);
 
@@ -370,14 +370,14 @@
                 toggleCard();
             }
         });
-        
+
         insideElement.addEventListener('touchstart', (event) => {
             if (!giftLink.contains(event.target)) {
                 event.preventDefault(); // Dokunma olayının kaydırma vb. yapmasını engelle
                 toggleCard();
             }
         });
-        
+
         // ÖNEMLİ: Hediye linki tıklandığında (masaüstü ve mobil) sadece link çalışsın, kart durumu değişmesin.
         giftLink.addEventListener('click', (event) => {
             // Linkin varsayılan davranışını (yönlendirmeyi) engellemiyoruz.
@@ -386,7 +386,7 @@
         });
         giftLink.addEventListener('touchstart', (event) => {
             // Mobil cihazlarda touchend beklenmeden linkin çalışmasını sağlayabilir.
-            event.stopPropagation(); 
+            event.stopPropagation();
         });
 
 
