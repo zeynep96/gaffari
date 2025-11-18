@@ -14,27 +14,28 @@
         }
 
         body {
-            background-color: #3c1d08;
+            background-color: #3c1d08; /* Koyu kahverengi zemin */
             min-height: 100vh;
-            display: flex; /* Ana ortalama için Flexbox */
+            display: flex;
             justify-content: center; /* Yatayda ortala */
             align-items: center; /* Dikeyde ortala */
-            overflow: hidden; /* Taşmaları engellemek için */
+            overflow: hidden;
         }
 
         .card {
             width: 640px;
             height: 400px;
-            position: relative; /* İçindeki absolute öğeler için referans */
+            position: relative;
             perspective: 1200px;
             transition: 1s;
-            /* body'deki flexbox tarafından zaten ortalandığı için buradaki display:flex kaldırıldı */
         }
 
-        .card:hover {
-            transform: rotate(-5deg);
+        /* Tıklamayla Açılma Kuralı (JavaScript ile eklenen sınıf) */
+        .card.opened .outside {
+            transform: rotateY(-130deg);
         }
 
+        /* Mouse ile Açılma Kuralı (Masaüstü için) */
         .card:hover .outside {
             transform: rotateY(-130deg);
         }
@@ -44,11 +45,11 @@
             height: 100%;
             width: 50%;
             position: absolute;
-            left: 50%; /* Yarım panelin sağ tarafa (kartın ortasına) hizalanması */
+            left: 50%;
         }
 
         .inside {
-            background: linear-gradient(to right, #4a2a1b, #f0f0f0 1%); /* İç kartın sol tarafı kahve, sağa doğru açılan renk */
+            background: linear-gradient(to right, #4a2a1b, #f0f0f0 1%);
             color: #333;
             line-height: 1.5;
             padding: 0 20px;
@@ -57,7 +58,7 @@
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
-            font-size: 1.1em; /* İç metni varsayılan olarak biraz daha büyük yap */
+            font-size: 1.1em;
         }
 
         .outside {
@@ -80,7 +81,7 @@
         }
 
         .front {
-            background-color: #104728;
+            background-color: #104728; /* Bilardo yeşili */
         }
 
         .back {
@@ -166,39 +167,36 @@
         }
         
         /* ======================================= */
-        /* MOBİL UYUMLULUK BAŞLANGIÇ               */
+        /* MOBİL UYUMLULUK                       */
         /* ======================================= */
         
         @media (max-width: 700px) {
             .card {
-                width: 90vw; /* Ekranın %90'ı kadar genişlik */
-                height: calc(90vw / 1.6); /* Genişliğe göre orantılı yükseklik */
+                width: 90vw;
+                height: calc(90vw / 1.6);
                 max-width: 400px;
                 max-height: calc(400px / 1.6);
             }
             
-            /* Dış kart metni */
             .outside p {
-                font-size: clamp(14px, 3.5vw, 20px); /* Minimum, viewport tabanlı, maksimum değer */
+                font-size: clamp(14px, 3.5vw, 20px);
                 letter-spacing: 2px;
                 margin-top: clamp(15px, 4vw, 30px);
-                line-height: 1.2; /* Satır aralığını daralt */
+                line-height: 1.2;
             }
 
-            /* Pastayı küçültme */
             .cake {
-                bottom: clamp(15px, 4vw, 30px); /* Dinamik alt boşluk */
+                bottom: clamp(15px, 4vw, 30px);
             }
             .top-layer,
             .middle-layer,
             .bottom-layer {
-                height: clamp(40px, 10vw, 80px); /* Pasta katman yüksekliğini düşür */
-                width: clamp(120px, 30vw, 240px); /* Pasta genişliğini düşür */
-                background-size: clamp(30px, 7.5vw, 60px) clamp(50px, 12.5vw, 100px); /* Arkaplan desenini küçült */
-                background-position: center 0; /* Ortalamak için */
+                height: clamp(40px, 10vw, 80px);
+                width: clamp(120px, 30vw, 240px);
+                background-size: clamp(30px, 7.5vw, 60px) clamp(50px, 12.5vw, 100px);
+                background-position: center 0;
             }
             
-            /* Pasta katman konumları (küçültmeye uyumlu) */
             .middle-layer {
                 top: clamp(3px, 0.75vw, 6px);
             }
@@ -207,11 +205,9 @@
                 top: clamp(13px, 3.25vw, 26px);
             }
             
-            /* Mum konumunu ve boyutunu ayarlama */
             .candle {
                 height: clamp(25px, 6.25vw, 45px);
                 width: clamp(8px, 2vw, 15px);
-                /* Pasta katman yüksekliğine göre ayarla */
                 bottom: calc(clamp(40px, 10vw, 80px) * 2.5 + clamp(15px, 4vw, 30px) - 20px); 
             }
 
@@ -221,22 +217,17 @@
                 bottom: clamp(30px, 7.5vw, 48px);
             }
             
-            /* İç metin ve emoji boyutunu küçültme */
             .inside p {
-                font-size: clamp(0.8em, 2.5vw, 1.1em); /* Minimum, viewport tabanlı, maksimum değer */
+                font-size: clamp(0.8em, 2.5vw, 1.1em);
                 padding: clamp(5px, 1vw, 20px);
                 line-height: 1.2;
             }
 
             .inside h1 {
                 font-size: clamp(60px, 15vw, 120px);
-                line-height: 1; /* Emoji tek satırda olsun */
+                line-height: 1;
             }
         }
-        
-        /* ======================================= */
-        /* MOBİL UYUMLULUK SONU                    */
-        /* ======================================= */
     </style>
 </head>
 
@@ -260,6 +251,26 @@
             <h1>&#127873;</h1>
         </div>
     </div>
+
+    <script>
+        function openCard() {
+            const card = document.querySelector('.card');
+            
+            // Eğer kartta 'opened' sınıfı yoksa, ekle (kartı aç)
+            if (!card.classList.contains('opened')) {
+                card.classList.add('opened');
+            } else {
+                // İsteğe bağlı: Tekrar tıklamayla kapatmayı isterseniz bu satırı kullanın
+                // card.classList.remove('opened');
+            }
+        }
+        
+        // Kartın dış kapağına tıklama (masaüstü) ve dokunma (mobil) olaylarını bağlıyoruz.
+        const outsideElement = document.querySelector('.outside');
+        outsideElement.addEventListener('click', openCard);
+        outsideElement.addEventListener('touchstart', openCard);
+
+    </script>
 </body>
 
 </html>
