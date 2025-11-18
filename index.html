@@ -10,8 +10,9 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            background: black; /* Koyu dış arkaplan */
-            color: #E5E7EB; 
+            background: black;
+            /* Koyu dış arkaplan */
+            color: #E5E7EB;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,42 +26,62 @@
             padding-bottom: 15px;
             background: #104728;
             border-radius: 12px;
-            box-shadow: 0 0 40px #9e7053, 0 0 0 10px #3c1d08; /* Daha derin gölge ve koyu dış çerçeve */
+            box-shadow: 0 0 40px #9e7053, 0 0 0 10px #3c1d08;
+            /* Daha derin gölge ve koyu dış çerçeve */
             box-sizing: border-box;
             color: #E0E0E0;
 
             /* Delik efektleri için konumlandırma */
             position: relative;
-            overflow: hidden; 
+            overflow: hidden;
         }
 
         /* Köşe Delikleri (Cepler) */
         .pocket {
             position: absolute;
-            background: rgba(78, 61, 51, 0.85); /* Koyu cep içi */
-            border-radius: 50%; 
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(27, 26, 26, 0.7); 
-            width: 45px; /* Cep boyutu */
+            background: rgba(78, 61, 51, 0.85);
+            /* Koyu cep içi */
+            border-radius: 50%;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(27, 26, 26, 0.7);
+            width: 45px;
+            /* Cep boyutu */
             height: 45px;
-            z-index: 10; 
-            border: 2px solid #555; 
+            z-index: 10;
+            border: 2px solid #555;
         }
+
         /* Köşeler */
-        .pocket.top-left { top: -22px; left: -22px; }
-        .pocket.top-right { top: -22px; right: -22px; }
-        .pocket.bottom-left { bottom: -22px; left: -22px; }
-        .pocket.bottom-right { bottom: -22px; right: -22px; }
-        
-        /* ORTA CEPLERİN KONUMLANDIRILMASI (Sol ve Sağ Ortası) */
-        .pocket.middle-left { 
-            top: 50%; 
-            left: -30px; 
-            transform: translateY(-50%); 
+        .pocket.top-left {
+            top: -22px;
+            left: -22px;
         }
-        .pocket.middle-right { 
-            top: 50%; 
-            right: -30px; 
-            transform: translateY(-50%); 
+
+        .pocket.top-right {
+            top: -22px;
+            right: -22px;
+        }
+
+        .pocket.bottom-left {
+            bottom: -22px;
+            left: -22px;
+        }
+
+        .pocket.bottom-right {
+            bottom: -22px;
+            right: -22px;
+        }
+
+        /* ORTA CEPLERİN KONUMLANDIRILMASI (Sol ve Sağ Ortası) */
+        .pocket.middle-left {
+            top: 50%;
+            left: -30px;
+            transform: translateY(-50%);
+        }
+
+        .pocket.middle-right {
+            top: 50%;
+            right: -30px;
+            transform: translateY(-50%);
         }
 
 
@@ -72,16 +93,20 @@
                 padding: 15px;
             }
         }
+
         @media (max-width: 480px) {
             .container {
                 max-width: 100%;
                 margin: 10px auto;
                 padding: 10px;
             }
-            .pocket { 
-                display: none; /* Mobil görünümde cepleri gizle */
+
+            .pocket {
+                display: none;
+                /* Mobil görünümde cepleri gizle */
             }
         }
+
         /* --- Mobil Uyumluluk Sonu --- */
 
 
@@ -93,18 +118,18 @@
         .header h1 {
             margin: 0;
             font-weight: 800;
-            color: #FFD700; 
+            color: #FFD700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-            border-bottom: 3px solid #fff4b7; 
-            
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            border-bottom: 3px solid #fff4b7;
+
         }
 
         .header h2 {
             margin-top: 10px;
             margin-bottom: 15px;
-            color: #D3D3D3; 
+            color: #D3D3D3;
             font-weight: 300;
         }
 
@@ -112,10 +137,10 @@
             margin-bottom: 10px;
             font-weight: 600;
             font-size: 1.1em;
-            color: #E0E0E0; 
+            color: #E0E0E0;
             padding: 10px;
-            border-left: 5px solid #FFD700; 
-            background: #3A3A3A; 
+            border-left: 5px solid #FFD700;
+            background: #3A3A3A;
         }
 
         .notes-box {
@@ -131,13 +156,13 @@
             padding: 10px;
             box-sizing: border-box;
             font-size: 1em;
-            background: #4A4A4A; 
+            background: #4A4A4A;
             color: #E0E0E0;
             transition: border-color 0.3s;
         }
 
         textarea:focus {
-            border-color: #FFD700; 
+            border-color: #FFD700;
             outline: none;
         }
 
@@ -147,7 +172,7 @@
             font-size: 0.9em;
             border: none;
             border-radius: 4px;
-            background: #5F9EA0; 
+            background: #5F9EA0;
             color: white;
             cursor: pointer;
             margin-top: 15px;
@@ -155,21 +180,23 @@
             font-weight: 600;
             text-transform: uppercase;
             transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
         button:hover {
-            background: #008B8B; 
+            background: #008B8B;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
         }
 
         /* Matris Grid Alanı - Masanın Yeşil Kısmı */
         .grid-area {
-            background: #2E8B57; /* Bilardo Masası Yeşili */
+            background: #2E8B57;
+            /* Bilardo Masası Yeşili */
             padding: 15px;
             border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8); /* Yeşile derinlik katmak için iç gölge */
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+            /* Yeşile derinlik katmak için iç gölge */
             margin-top: 10px;
         }
 
@@ -178,20 +205,23 @@
             display: grid;
             grid-template-columns: 80px 1fr 1fr;
             grid-template-rows: 60px 1fr 1fr;
-            gap: 5px; 
-            background: #2E8B57; /* Kutu araları da yeşil olsun */
+            gap: 5px;
+            background: #2E8B57;
+            /* Kutu araları da yeşil olsun */
         }
 
         .axis {
-            background: #1C6B45; /* Yeşil kadife rengi eksenler */
-            color: #FFD700; /* Altın rengi metin */
+            background: #1C6B45;
+            /* Yeşil kadife rengi eksenler */
+            color: #FFD700;
+            /* Altın rengi metin */
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 1.1em;
             border-radius: 4px;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5); 
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .left-axis {
@@ -203,54 +233,100 @@
             padding: 15px;
             padding-top: 10px;
             border-radius: 4px;
-            border: 2px solid #1C6B45; /* Koyu yeşil border */
+            border: 2px solid #1C6B45;
+            /* Koyu yeşil border */
         }
 
         .box-title {
             font-size: 1.1em;
             font-weight: 700;
             margin-bottom: 5px;
-            color: white; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
-        
-        /* KUTU RENKLERİ (BİLARDO TOPU RENKLERİ) */
-        .bg-yap { background: #B22222; }
-        .bg-planla { background: #000080; }
-        .bg-devret { background: #FF8C00; }
-        .bg-ele { background: #800080; }
 
-        .bg-yap textarea, .bg-planla textarea, .bg-devret textarea, .bg-ele textarea {
+        /* KUTU RENKLERİ (BİLARDO TOPU RENKLERİ) */
+        .bg-yap {
+            background: #B22222;
+        }
+
+        .bg-planla {
+            background: #000080;
+        }
+
+        .bg-devret {
+            background: #FF8C00;
+        }
+
+        .bg-ele {
+            background: #800080;
+        }
+
+        .bg-yap textarea,
+        .bg-planla textarea,
+        .bg-devret textarea,
+        .bg-ele textarea {
             background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255,255,255,0.4);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             color: white;
         }
-        
-        /* Mobil Grid Düzenlemesi */
-        @media (max-width: 600px) {
-            .grid {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
 
+        /* Mevcut 600px ve altı kurallarını bu yeni kurallarla değiştirin. */
+        @media (max-width: 768px) {
+
+            /* Cep telefonu görünümünde eksen başlıklarını daha küçük yap */
             .axis {
-                height: 40px;
-                order: -1;
+                font-size: 0.9em;
             }
 
+            /* Ekseni dikeyden yataya çeviren ve kutu sırasını bozan kuralları kaldırıyoruz. */
             .left-axis {
-                writing-mode: horizontal-tb !important;
-                transform: none !important;
-                justify-content: flex-start;
-                padding-left: 12px;
-                background: #34495E; 
-                color: white;
-                margin-top: 10px;
+                /* Dikey eksen metnini korumak için, daha küçük ekranlarda bile. */
+                writing-mode: vertical-rl;
+                transform: rotate(180deg);
+                width: 40px;
+                /* Daha dar yapalım */
+                padding: 0;
             }
 
-            .box {
-                padding: 15px 12px;
+            /* Grid'i daha küçük ekranlarda bile iki sütunlu tutmak için */
+            .grid {
+                grid-template-columns: 50px 1fr 1fr;
+                /* Eksen daraltıldı */
+                grid-template-rows: 40px 1fr 1fr;
+                /* Üst eksen daraltıldı */
+                gap: 5px;
+            }
+        }
+
+
+        /* En dar telefonlar için ek optimizasyon */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            /* Dikey eksenler hala yan yana duracak, ancak yazı küçültülecek */
+            .axis {
+                font-size: 0.8em;
+            }
+
+            /* Orta cepleri mobilde zaten gizlemiştiniz, bu kalsın. */
+            .pocket {
+                display: none;
+            }
+
+            .question-box {
+                font-size: 1em;
+            }
+
+            .box-title {
+                font-size: 1em;
+            }
+
+            /* Textarea'ları biraz daha küçük yapabiliriz */
+            textarea {
+                min-height: 80px;
             }
         }
     </style>
@@ -259,7 +335,7 @@
 <body>
 
     <div class="container">
-        
+
         <div class="pocket top-left"></div>
         <div class="pocket top-right"></div>
         <div class="pocket bottom-left"></div>
@@ -345,9 +421,12 @@
             const question = document.getElementById('question').innerText;
             const date = new Date().toLocaleDateString();
 
+            const BOM = new Uint8Array([0xEF, 0xBB, 0xBF]); // BOM Eklendi
+
             let csvContent = `Tarih;Soru;Cevap\n${date};${question};${note}\n`;
 
-            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            // Blob'a BOM eklendi
+            const blob = new Blob([BOM, csvContent], { type: "text/csv;charset=utf-8;" });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
@@ -364,12 +443,15 @@
             const ele = document.getElementById("ele").value.replace(/\n/g, "; ");
             const date = new Date().toLocaleDateString();
 
+            const BOM = new Uint8Array([0xEF, 0xBB, 0xBF]); // BOM Eklendi
+
             // İlk satırda sadece tarih
             let csv = `Tarih:${date};acil;acil değil\n`;
             csv += `önemli;${yap};${planla}\n`;
             csv += `önemli değil;${devret};${ele}\n`;
 
-            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            // Blob'a BOM eklendi
+            const blob = new Blob([BOM, csv], { type: "text/csv;charset=utf-8;" });
             const url = URL.createObjectURL(blob);
 
             const link = document.createElement("a");
@@ -377,7 +459,6 @@
             link.download = "Eisenhower_Matrisi.csv";
             link.click();
         }
-
 
 
         // Notlar ve matrisi birleştirip tek CSV indir 
@@ -391,10 +472,16 @@
             const devret = document.getElementById("devret").value.replace(/\n/g, " | ");
             const ele = document.getElementById("ele").value.replace(/\n/g, " | ");
 
-            let csv = "Tarih;Soru;Cevap;Yap(Ön.Acil);Planla(Ön.AcilD);Devret(ÖnD.Acil);Sil(ÖnD.AcilD)\n";
+            // Yeni satır: BOM (Byte Order Mark) eklemek için
+            // UTF-8 BOM: 0xEF, 0xBB, 0xBF
+            const BOM = new Uint8Array([0xEF, 0xBB, 0xBF]);
+
+            let csv = "Tarih;Soru;Cevap;Yap;Planla;Önemli Değil&Acil;Önemli ya da Acil Değil\n";
             csv += `${date};"${question}";"${note}";"${yap}";"${planla}";"${devret}";"${ele}"\n`;
 
-            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            // Blob'u oluştururken BOM'u ekleyin
+            // type: "text/csv;charset=utf-8;" ile kodlamayı belirtin
+            const blob = new Blob([BOM, csv], { type: "text/csv;charset=utf-8;" });
             const url = URL.createObjectURL(blob);
 
             const link = document.createElement("a");
