@@ -14,14 +14,11 @@
         }
 
         body {
-            background-color: #3c1d08;
-            /* Koyu kahverengi zemin */
+            background-color: #3c1d08; /* Koyu kahverengi zemin */
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            /* Yatayda ortala */
-            align-items: center;
-            /* Dikeyde ortala */
+            justify-content: center; /* Yatayda ortala */
+            align-items: center; /* Dikeyde ortala */
             overflow: hidden;
         }
 
@@ -33,15 +30,30 @@
             transition: 1s;
         }
 
-        /* Tıklamayla Açılma Kuralı (JavaScript ile eklenen sınıf) */
-        .card.opened .outside {
-            transform: rotateY(-130deg);
-        }
-
-        /* Mouse ile Açılma Kuralı (Masaüstü için) */
+        /* -------------------------------------- */
+        /* AÇILMA KURALLARI */
+        /* -------------------------------------- */
+        
+        /* 1. MASAÜSTÜ HOVER İLE AÇMA/KAPAMA */
         .card:hover .outside {
             transform: rotateY(-130deg);
         }
+
+        /* 2. MOBİL TIKLAMA İLE AÇMA/KAPAMA (JS ile eklenen sınıf) */
+        .card.opened .outside {
+            transform: rotateY(-130deg);
+        }
+        
+        /* 3. AÇILDIKTAN SONRA ÇATIŞMA ÇÖZÜMÜ (ÇOK ÖNEMLİ) */
+        /* Kart açıldığında, kapağın (outside) tıklama olaylarını görmezden gelmesini sağlar.
+           Böylece tıklama altındaki .inside elementine ulaşır ve kapanma tetiklenir. */
+        .card.opened .outside {
+            pointer-events: none; 
+        }
+
+        /* -------------------------------------- */
+        /* GENEL KART YAPISI */
+        /* -------------------------------------- */
 
         .outside,
         .inside {
@@ -50,7 +62,18 @@
             position: absolute;
             left: 50%;
         }
+        
+        /* AÇILAN KISIM (KAPAK) */
+        .outside {
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            z-index: 1; /* Kapalıyken en üstte */
+            transform-origin: left;
+            transition: 2s;
+            cursor: pointer; /* Açılma alanının tıklanabilir olduğunu gösterir */
+        }
 
+        /* İÇ KISIM (MESAJ) */
         .inside {
             background: linear-gradient(to right, #4a2a1b, #f0f0f0 1%);
             color: #333;
@@ -62,15 +85,7 @@
             justify-content: space-around;
             align-items: center;
             font-size: 1.1em;
-        }
-
-        .outside {
-            -webkit-transform-style: preserve-3d;
-            transform-style: preserve-3d;
-            z-index: 1;
-            transform-origin: left;
-            transition: 2s;
-            cursor: pointer;
+            cursor: pointer; /* Kapanma alanının tıklanabilir olduğunu gösterir */
         }
 
         .front,
@@ -84,14 +99,15 @@
         }
 
         .front {
-            background-color: #104728;
-            /* Bilardo yeşili */
+            background-color: #104728; /* Bilardo yeşili */
         }
 
         .back {
             transform: rotateY(180deg);
             background: linear-gradient(to left, #2e170d, #f0f0f0 1%);
         }
+        
+        /* ... PASTA KURALLARI (DEĞİŞMEDİ) ... */
 
         .cake {
             width: 100%;
@@ -170,9 +186,9 @@
             color: #3c1d08;
         }
 
-        /* ======================================= */
-        /* MOBİL UYUMLULUK                       */
-        /* ======================================= */
+        /* -------------------------------------- */
+        /* MOBİL UYUMLULUK (DEĞİŞMEDİ) */
+        /* -------------------------------------- */
 
         @media (max-width: 700px) {
             .card {
@@ -258,18 +274,40 @@
     </div>
 
     <script>
-        function openCard() {
+        // Fonksiyonlar, kartı açma/kapama görevini üstlenir.
+        function toggleCard() {
             const card = document.querySelector('.card');
-
-            // Eğer kartta 'opened' sınıfı varsa, kaldır (kartı kapat)
-            // Eğer yoksa, ekle (kartı aç)
-            card.classList.toggle('opened'); // Bu satır hem ekler hem kaldırır
+            card.classList.toggle('opened'); // 'opened' sınıfını ekler veya kaldırır
         }
 
-        // Kartın dış kapağına tıklama (masaüstü) ve dokunma (mobil) olaylarını bağlıyoruz.
+        // --- OLAY YAKALAYICILAR ---
+
+        // 1. AÇMA TETİKLEYİCİSİ (Kapalı kartın dış kapağı)
         const outsideElement = document.querySelector('.outside');
-        outsideElement.addEventListener('click', openCard);
-        outsideElement.addEventListener('touchstart', openCard);
+        
+        // Bu, mobilde açmayı sağlar.
+        outsideElement.addEventListener('touchstart', (event) => {
+             // Dokunma olayının diğer elementlere yayılmasını engeller (çift tıklama/hover etkileşimini önler)
+             event.preventDefault(); 
+             // Kartın şu anki durumuna göre açar veya kapatır
+             toggleCard();
+        });
+        
+        // Masaüstünde tıklama olayını da yakalar, ancak mobil cihazlarda touchstart çalıştığı için çakışmaz.
+        outsideElement.addEventListener('click', toggleCard);
+
+
+        // 2. KAPAMA TETİKLEYİCİSİ (Açık kartın iç mesaj alanı)
+        const insideElement = document.querySelector('.inside');
+        
+        // Bu, mobilde kapamayı sağlar.
+        insideElement.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            toggleCard();
+        });
+        
+        // Masaüstünde kapamayı sağlar.
+        insideElement.addEventListener('click', toggleCard);
 
     </script>
 </body>
