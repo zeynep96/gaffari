@@ -49,13 +49,13 @@
 
         /* 3. AÇILDIKTAN SONRA ÇATIŞMA ÇÖZÜMÜ (ÇOK ÖNEMLİ) */
         /* Kart açıldığında, kapağın (outside) tıklama olaylarını görmezden gelmesini sağlar.
-           Böylece tıklama altındaki .inside elementine ulaşır ve kapanma tetiklenir. */
+           Böylece tıklama altındaki .inside elementine ulaşır ve kapanma veya hediye linki tetiklenir. */
         .card.opened .outside {
             pointer-events: none;
         }
 
         /* -------------------------------------- */
-        /* GENEL KART YAPISI */
+        /* GENEL KART YAPISI VE İÇERİK GÖRÜNÜRLÜĞÜ */
         /* -------------------------------------- */
 
         .outside,
@@ -91,8 +91,54 @@
             align-items: center;
             font-size: 1.1em;
             cursor: pointer;
-            /* Kapanma alanının tıklanabilir olduğunu gösterir */
+            position: relative;
+            /* YENİ EKLENEN KURAL */
+            opacity: 0;
+            /* İçeriği başta gizle */
+            transition: opacity 1s 1s;
+            /* Opaklığı yavaşça değiştir (kapağın açılmasından sonra 1 saniye bekle) */
         }
+
+        /* Kart açıldığında içeriği görünür yap */
+        .card.opened .inside,
+        .card:hover .inside {
+            opacity: 1;
+        }
+
+        /* HEDİYE KUTUSU LİNKİ VE YAZISI */
+        .gift-link {
+            position: relative;
+            /* "Tıkla" yazısı için referans */
+            display: inline-block;
+            /* Genişliğini içeriğine göre ayarla */
+            text-decoration: none;
+            /* Alt çizgiyi kaldır */
+            color: inherit;
+            /* Yazı rengini ebeveyninden al */
+            cursor: pointer;
+            z-index: 1;
+            /* Diğer elemanların üstünde olsun */
+        }
+
+        .gift-text {
+            position: absolute;
+            top: 50%;
+            /* Hediye kutusunun ortasına */
+            left: 50%;
+            /* Hediye kutusunun ortasına */
+            transform: translate(-50%, -50%);
+            /* Kendi merkezine göre ortala */
+            color: #fff;
+            /* Beyaz yazı rengi */
+            font-size: 1.2em;
+            /* Yazı boyutu */
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            /* Gölge ile daha okunaklı */
+            pointer-events: none;
+            /* Yazının kendisi tıklamayı engellemesin */
+        }
+
 
         .front,
         .back {
@@ -194,7 +240,7 @@
         }
 
         /* -------------------------------------- */
-        /* MOBİL UYUMLULUK (DEĞİŞMEDİ) */
+        /* MOBİL UYUMLULUK */
         /* -------------------------------------- */
 
         @media (max-width: 700px) {
@@ -255,6 +301,11 @@
                 font-size: clamp(60px, 15vw, 120px);
                 line-height: 1;
             }
+
+            /* Mobil için "tıkla" yazısının boyutunu küçültme */
+            .gift-text {
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
@@ -276,7 +327,10 @@
         <div class="inside">
             <p>Gönlünüzden geçen tüm güzelliklerin gerçekleştiği, mutlu ve sağlıklı nice mutlu yaşlar dilerim 🎉
             </p>
-            <h1>&#127873;</h1>
+            <a href="http://gaffarininbilardomasasi.com/" target="_blank" class="gift-link">
+                <h1>&#127873;</h1>
+                <span class="gift-text">Tıkla</span>
+            </a>
         </div>
     </div>
 
@@ -284,37 +338,57 @@
         // Fonksiyonlar, kartı açma/kapama görevini üstlenir.
         function toggleCard() {
             const card = document.querySelector('.card');
-            card.classList.toggle('opened'); // 'opened' sınıfını ekler veya kaldırır
+            // 'opened' sınıfını ekler veya kaldırır
+            card.classList.toggle('opened'); 
         }
 
         // --- OLAY YAKALAYICILAR ---
 
         // 1. AÇMA TETİKLEYİCİSİ (Kapalı kartın dış kapağı)
         const outsideElement = document.querySelector('.outside');
-
+        
         // Bu, mobilde açmayı sağlar.
         outsideElement.addEventListener('touchstart', (event) => {
-            // Dokunma olayının diğer elementlere yayılmasını engeller (çift tıklama/hover etkileşimini önler)
-            event.preventDefault();
-            // Kartın şu anki durumuna göre açar veya kapatır
-            toggleCard();
+             // Dokunma olayının kaydırma vb. yapmasını engeller
+             event.preventDefault(); 
+             // Kartın şu anki durumuna göre açar veya kapatır
+             toggleCard();
         });
-
+        
         // Masaüstünde tıklama olayını da yakalar, ancak mobil cihazlarda touchstart çalıştığı için çakışmaz.
         outsideElement.addEventListener('click', toggleCard);
 
 
         // 2. KAPAMA TETİKLEYİCİSİ (Açık kartın iç mesaj alanı)
         const insideElement = document.querySelector('.inside');
+        const giftLink = document.querySelector('.gift-link');
 
-        // Bu, mobilde kapamayı sağlar.
+        // .inside'a, link dışındaki tıklamaları dinlemesini söylüyoruz.
+        insideElement.addEventListener('click', (event) => {
+            // Eğer tıklanan element hediye linki veya onun bir çocuğu değilse kartı kapat
+            if (!giftLink.contains(event.target)) {
+                toggleCard();
+            }
+        });
+        
         insideElement.addEventListener('touchstart', (event) => {
-            event.preventDefault();
-            toggleCard();
+            if (!giftLink.contains(event.target)) {
+                event.preventDefault(); // Dokunma olayının kaydırma vb. yapmasını engelle
+                toggleCard();
+            }
+        });
+        
+        // ÖNEMLİ: Hediye linki tıklandığında (masaüstü ve mobil) sadece link çalışsın, kart durumu değişmesin.
+        giftLink.addEventListener('click', (event) => {
+            // Linkin varsayılan davranışını (yönlendirmeyi) engellemiyoruz.
+            // Bu, linke tıklandığında kartın kapanmasını engeller.
+            event.stopPropagation();
+        });
+        giftLink.addEventListener('touchstart', (event) => {
+            // Mobil cihazlarda touchend beklenmeden linkin çalışmasını sağlayabilir.
+            event.stopPropagation(); 
         });
 
-        // Masaüstünde kapamayı sağlar.
-        insideElement.addEventListener('click', toggleCard);
 
     </script>
 </body>
